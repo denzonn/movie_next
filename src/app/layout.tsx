@@ -23,7 +23,7 @@ export default function RootLayout({
           referrerPolicy="no-referrer"
         />
       </head>
-      <body className={`${poppins.className} bg-[#141414]`}>
+      <body className={`${poppins.className} bg-[#141414] min-h-[100vh]`}>
         <Navbar />
         {children}
       </body>

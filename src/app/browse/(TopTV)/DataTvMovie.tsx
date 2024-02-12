@@ -1,5 +1,6 @@
 "use client";
 import HoverCardTvMovie from "@/components/Commons/HoverCardTvMovie";
+import Image from "next/image";
 import Link from "next/link";
 import React, { FC, useState } from "react";
 
@@ -20,19 +21,22 @@ const DataTvMovie: FC<DataTvMovieProps> = ({ backdrop_path, id, index }) => {
       onMouseLeave={() => setIsHover(false)}
     >
       <div className="z-10">
-        <img
+        <Image
           className="w-full h-full rounded-md"
           src={`https://image.tmdb.org/t/p/original${backdrop_path}`}
+          alt="TV"
+          height={500}
+          width={500}
         />
       </div>
       <div>
-      {isHover ? (
-        <HoverCardTvMovie
-          className={index === 0 ? "left-0" : index === 5 ? "right-0" : ""}
-          image={backdrop_path}
-          id={id}
-        />
-      ) : null}
+        {isHover ? (
+          <HoverCardTvMovie
+            className={index === 0 ? "left-0" : index === 5 ? "right-0" : ""}
+            image={backdrop_path}
+            id={id}
+          />
+        ) : null}
       </div>
     </Link>
   );

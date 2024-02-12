@@ -1,37 +1,61 @@
-import { anton } from "@/app/font";
-import PlayGroup from "@/components/BrowsePage/PlayGroup";
-import SimilarMovie from "@/components/BrowsePage/SimilarMovie/SimilarMovie";
-import { getData } from "@/services/data";
+"use client";
+import { getData } from "@/services/getData";
 import dynamic from "next/dynamic";
+import Image from "next/image";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import PlayGroup from "./PlayGroup";
+import { anton } from "@/app/font";
+import SimilarMovie from "./SimilarMovie/SimilarMovie";
 
 const Modal = dynamic(() => import("@/components/Commons/Modal"));
 
-export default async function DetailTopMovie(props: any) {
-  const { params } = props;
+const getDatas = async ({ url, callback }: { url: string; callback: any }) => {
+  try {
+    const res = await getData(url);
 
-  const data = await getData(
-    `https://api.themoviedb.org/3/movie/${params.id}?language=en-US`
-  );
+    callback(res);
+  } catch (error) {}
+};
 
-  const getMovieLink = await getData(
-    `https://api.themoviedb.org/3/movie/${params.id}/videos?language=en-US`
-  );
+export default function DetailTopMovie(props: any) {
+  const [data, setData] = useState();
+  const [dataMovieLink, setDataMovieLink] = useState();
+  const [dataSimilarMovie, setDataSimilarMovie] = useState();
+  const searchParams = useSearchParams();
+  const jbtv = searchParams.get("jbtv");
 
-  const similarMovie = await getData(
-    `https://api.themoviedb.org/3/movie/${params.id}/similar?language=en-US&page=1`
-  );
+  useEffect(() => {
+    getDatas({
+      url: `https://api.themoviedb.org/3/movie/${jbtv}?language=en-US`,
+      callback: setData,
+    });
+    getDatas({
+      url: `https://api.themoviedb.org/3/movie/${jbtv}/videos?language=en-US`,
+      callback: setDataMovieLink,
+    });
+    getDatas({
+      url: `https://api.themoviedb.org/3/movie/${jbtv}/similar?language=en-US&page=1`,
+      callback: setDataSimilarMovie,
+    });
+  }, [jbtv]);
 
   return (
     <Modal>
       <div className="rounded-t-md relative">
         <div className={`absolute bottom-20 left-0 px-10 z-20`}>
           <div className={`${anton.className} text-6xl`}>{data?.title}</div>
-          <PlayGroup
-            getMovieLink={getMovieLink?.results?.[0].key}
-          />
+          <PlayGroup getMovieLink={dataMovieLink?.results?.[0].key} />
         </div>
+        {/* <Image
+          src={`https://image.tmdb.org/t/p/original${data?.backdrop_path}`}
+          alt=""
+          className="rounded-t-md"
+          width={1000}
+          height={1000}
+        /> */}
         <img
-          src={`https://image.tmdb.org/t/p/original${data.backdrop_path}`}
+          src={`https://image.tmdb.org/t/p/original${data?.backdrop_path}`}
           alt=""
           className="rounded-t-md"
         />
@@ -71,7 +95,7 @@ export default async function DetailTopMovie(props: any) {
         </div>
         <div className="mt-8 text-xl font-semibold">More Like This</div>
         <div>
-          <SimilarMovie similarMovie={similarMovie?.results}/>
+          <SimilarMovie similarMovie={dataSimilarMovie?.results} />
         </div>
         <div className="mt-8 ">
           <div className="text-xl font-semibold">About {data?.title}</div>

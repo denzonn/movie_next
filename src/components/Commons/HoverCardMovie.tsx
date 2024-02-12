@@ -2,7 +2,8 @@
 import { FC, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { getData } from "@/services/data";
+import { getData } from "@/services/getData";
+import { createData } from "@/services/createData";
 
 interface PopupHoverProps {
   image?: string;
@@ -25,8 +26,11 @@ const content = {
 
 const PopupHover: FC<PopupHoverProps> = ({ image, id, className }) => {
   const [data, setData] = useState([]);
+  const [isWishlish, setIsWishlish] = useState(false);
   const [isPlaylist, setIsPlaylist] = useState(false);
   const [isLike, setIsLike] = useState(false);
+
+  const ids = id;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,6 +40,32 @@ const PopupHover: FC<PopupHoverProps> = ({ image, id, className }) => {
         );
 
         setData(res);
+      } catch (error) {}
+    };
+
+    fetchData();
+  }, [id]);
+
+  const addWishlish = async () => {
+    createData(`https://api.themoviedb.org/3/account/20321334/watchlist`, {
+      media_type: "movie",
+      media_id: id,
+      watchlist: true,
+    });
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await getData(
+          `https://api.themoviedb.org/3/account/20321334/watchlist/movies?language=en-US&sort_by=created_at.asc`
+        );
+
+        const data = res?.results?.find((item) => item.id === ids);
+
+        if (data) {
+          setIsWishlish(true);
+        }
       } catch (error) {}
     };
 
@@ -73,11 +103,13 @@ const PopupHover: FC<PopupHoverProps> = ({ image, id, className }) => {
             onMouseEnter={() => setIsPlaylist(true)}
             onMouseLeave={() => setIsPlaylist(false)}
           >
-            <i className="fa-solid fa-plus"></i>
+            <i className={`fa-solid ${isWishlish ? "fa-check" : "fa-plus"}`}></i>
             {isPlaylist ? (
-              <div className="relative shadow-md">
-                <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-50 text-lg bg-gray-100 px-4 py-1 w-44 flex justify-center rounded-md text-black font-semibold">
-                  Add to My List
+              <div className="relative shadow-md" onClick={() => addWishlish()}>
+                <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-50 text-base bg-gray-100 px-4 py-1 w-44 text-center rounded-md text-black font-semibold">
+                  {
+                    isWishlish ? "Remove from My List" : "Add to My List"
+                  }
                 </div>
                 <div className="absolute bottom-8 left-1/2 -translate-x-1/2 border-gray-100 border-t-8 border-l-8 border-r-8 border-r-transparent border-l-transparent"></div>
               </div>
@@ -91,7 +123,7 @@ const PopupHover: FC<PopupHoverProps> = ({ image, id, className }) => {
             <i className="fa-solid fa-thumbs-up"></i>
             {isLike ? (
               <div className="relative shadow-md">
-                <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-50 text-lg bg-gray-100 px-4 py-1 w-32 flex justify-center rounded-md text-black font-semibold">
+                <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-50 text-base bg-gray-100 px-4 py-1 w-32 flex justify-center rounded-md text-black font-semibold">
                   I Like This
                 </div>
                 <div className="absolute bottom-8 left-1/2 -translate-x-1/2 border-gray-100 border-t-8 border-l-8 border-r-8 border-r-transparent border-l-transparent"></div>

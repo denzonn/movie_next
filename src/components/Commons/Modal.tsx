@@ -19,11 +19,11 @@ export default function Modal({ children }: { children: React.ReactNode }) {
       onClick={close}
     >
       <div className="absolute top-10 left-1/2 -translate-x-1/2 bg-[#141414] rounded-md w-[57vw] ">
-        <div className="absolute top-7 right-10 cursor-pointer z-50">
-          <i
-            className="fa-solid fa-xmark text-white text-lg"
-            onClick={close}
-          ></i>
+        <div
+          className="absolute top-7 right-10 cursor-pointer z-50"
+          onClick={close}
+        >
+          <i className="fa-solid fa-xmark text-white text-lg"></i>
         </div>
         {children}
       </div>

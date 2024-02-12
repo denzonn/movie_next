@@ -37,7 +37,7 @@ export default function Navbar() {
         </div>
         <div>
           <ul className="flex flex-row text-[14px] gap-x-5">
-            <Link href={"/"}>
+            <Link href={"/browse"}>
               <li>Home</li>
             </Link>
             <Link href={"/"}>
@@ -49,7 +49,7 @@ export default function Navbar() {
             <Link href={"/"}>
               <li>New & Popular</li>
             </Link>
-            <Link href={"/"}>
+            <Link href={"/browse/my-list"}>
               <li>My List</li>
             </Link>
             <Link href={"/"}>

@@ -66,7 +66,7 @@ const TopMovies: FC<TopMoviesProps> = ({ data }) => {
           </button>
         ) : null}
       </div>
-      <div className="flex relative z-4 gap-x-4 px-10">
+      <div className="flex z-4 gap-x-4 px-10">
         {dataShow.map((item: DataType, index) => (
           <MoviesData
             key={index}

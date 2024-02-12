@@ -1,4 +1,4 @@
-import { getData } from "@/services/data";
+import { getData } from "@/services/getData";
 import Image from "next/image";
 import { Metadata } from "next";
 import Link from "next/link";
@@ -35,7 +35,6 @@ export default async function BrowsePage() {
   return (
     <div>
       <CoreMovieComponent>
-        {" "}
         <div className="absolute top-[25vh] left-0 px-[4vw] z-40 overflow-hidden">
           <div className="flex flex-row gap-x-3 items-center px-2">
             <div className="h-auto w-auto">
@@ -80,6 +79,7 @@ export default async function BrowsePage() {
             </div>
           </div>
         </div>
+        <div className="absolute bottom-0 w-full h-40 bg-gradient-to-t from-[#141414] to-[rgba(20, 20, 20, 0)]"></div>
       </CoreMovieComponent>
 
       <div className="relative z-40">

@@ -2,7 +2,7 @@
 import { FC, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { getData } from "@/services/data";
+import { getData } from "@/services/getData";
 
 interface HoverCardTvMovieProps {
   image?: string;
